@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script>
+        // Define a global variable
+        var myGlobalVariable = 100;
+    </script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link href="test.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="static/cart.css">
+
+</head>
+
+<body>
+
+    {% include "navbar.html" %}
+
+    <section id="shopping-cart" class="h-100">
+        <div class="container h-100 py-5">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-10">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="fw-normal mb-0 text-black">Shopping Cart</h3>
+                        
+                    </div>
+
+
+                    {% for item in shopping_cart %}
+                    <div class="card rounded-3 mb-4">
+                        <div class="card-body p-4">
+                            <div class="row d-flex justify-content-between align-items-center">
+                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                    <img src="{{ item.image_link }}" class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                    <p class="lead fw-normal mb-2">{{ item.name }}</p>
+                                    <p>{{item.gram}}</p>
+                                </div>
+                                <div class="col-md-1 col-lg-1 col-xl-1 text-center">
+                                    <input type="number" class="form-control" name="quantity" min="1" value="{{ item.quantity }}" data-price="{{ item.price }}">
+                                </div>
+                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                    <h5 class="mb-0">{{ item.price }}₪</h5>
+                                </div>
+                    
+                                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                    <a href="{{ url_for('remove_from_cart', item=item.name, grams=item.gram)}}" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                
+                
+
+                <button onclick="clearCart()">Clear Cart</button>
+
+                <script>
+                function clearCart() {
+                  // Clear the cart items
+                  cartItems = [];
+                  displayCartItems();
+  
+                // Clear the session storage
+                sessionStorage.clear();
+  
+                // Clear the cookies
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                  var cookie = cookies[i];
+                  var eqPos = cookie.indexOf("=");
+                  var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                  document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                }
+  
+                // Alert the user
+                alert("Cart cleared!");
+              }
+
+                </script>
+                
+                
+
+                <button id="calculate-total-price-btn" class="btn btn-primary">Calculate Total Price</button>
+
+                <div class="card mb-4">
+                    <div class="card-body p-4 d-flex flex-row">
+                      <div class="form-outline flex-fill">
+                        <label class="form-label" for="form1">TOTAL PRICE SHUFERSAL</label>
+                        <br>
+                        <h5 class="mb-0" id="total-price-shufersal">{{price}}₪</h5>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="card mb-77">
+                    <div class="card-body p-4 d-flex flex-row">
+                      <div class="form-outline flex-fill">
+                        <label class="form-label" for="form1">TOTAL PRICE QUICK</label>
+                        <br>
+                        <h5 class="mb-0" id="total-price-quick">{{priceq}}₪</h5>
+                        <br>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous">
+    </script>
+  
+  <script>
+
+    // get all the input elements
+var quantityInputs = document.querySelectorAll('input[name="quantity"]');
+
+// add event listener to each quantity input
+quantityInputs.forEach(function(input) {
+  input.addEventListener('change', function() {
+    calculateTotalPrice();
+  });
+});
+
+function calculateTotalPrice() {
+  // get all the product cards
+  var productCards = document.querySelectorAll('.card');
+
+  var total = 0;
+
+  // loop through each product card and get the quantity and price of the item
+  productCards.forEach(function(card) {
+    var quantity = card.querySelector('input[name="quantity"]').value;
+    var price = card.querySelector('input[name="quantity"]').dataset.price;
+
+    // calculate the subtotal for this item and add it to the total
+    var subtotal = quantity * price;
+    total += subtotal;
+  });
+
+  // update the total price on the page
+  document.querySelector('#total-price-shufersal').innerHTML = total + '₪';
+  document.querySelector('#total-price-quick').innerHTML = total*1.1 + '₪';
+}
+
+    // get all the input elements
+    var quantityInputs = document.querySelectorAll('input[name="quantity"]');
+
+    // add event listener to each input element
+    quantityInputs.forEach(function(input) {
+        input.addEventListener('change', function() {
+            // get the item price and quantity
+            var price = parseInt(input.getAttribute('data-price'));
+            var quantity = parseInt(input.value);
+
+            // update the total price
+            var totalPriceElement = input.parentNode.parentNode.querySelector('h5');
+            var totalPrice = price * quantity;
+            totalPriceElement.textContent = totalPrice+ '₪';
+        });
+    });
+</script>
+<script>
+  // get the button element by id
+  const calculateTotalPriceBtn = document.querySelector('#calculate-total-price-btn');
+
+  // add a click event listener to the button
+  calculateTotalPriceBtn.addEventListener('click', () => {
+    // get all the input elements with the name attribute "quantity"
+    const quantityInputs = document.querySelectorAll('input[name="quantity"]');
+
+    let totalPriceShufersal = 0;
+    let totalPriceQuick = 0;
+
+    // loop over all the quantity inputs and calculate the total prices
+    quantityInputs.forEach((input) => {
+      const quantity = input.value;
+      const price = input.getAttribute('data-price');
+
+      // calculate the total price for Shufersal and Quick separately
+      totalPriceShufersal += quantity * price;
+      totalPriceQuick += quantity * price * 1.1; // add 10% for Quick
+
+    });
+
+    // update the total price elements in the HTML with the calculated prices
+    const totalPriceShufersalEl = document.querySelector('#total-price-shufersal');
+    totalPriceShufersalEl.textContent = `${totalPriceShufersal.toFixed(2)}₪`;
+
+    const totalPriceQuickEl = document.querySelector('#total-price-quick');
+    totalPriceQuickEl.textContent = `${totalPriceQuick.toFixed(2)}₪`;
+
+  });
+</script>
+
+</body>
+
+</html>
