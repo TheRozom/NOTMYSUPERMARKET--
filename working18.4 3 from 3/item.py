@@ -12,12 +12,14 @@ from flask import session, make_response
 from flask import Flask, render_template, request, redirect, url_for, flash
 import hashlib
 import pandas as pd
+import re
 
-df = pandas.read_excel('quik.xlsx')
+df = pandas.read_excel("quik.xlsx")
 
 
 class Item:
     def __init__(self, name, price, gram, image_link):
+        df = pandas.read_excel("quik.xlsx")
         self.name = name
         self.price = price
         self.gram = gram
@@ -27,13 +29,49 @@ class Item:
         # print(df)
         df2 = df.copy()
         print(self.name, self.gram)
-        matching_productnames = df[(df['NAME']).str.contains(
-            self.name, case=False)]
+        matching_productnames = df[(df["NAME"]).str.contains(self.name, case=False)]
+        print("***********")
+        print(matching_productnames)
+        gramsstr = str(self.gram + "")
+        print("***")
+        print(self.gram)
+        print("***")
+        gramnumber = re.sub(r"\D", "", self.gram)
+        print(gramnumber)
+        print("***??????????????")
+        # matching_productgrams = matching_productnames[
+        #     matching_productnames["GRAM"].astype(str).str.contains(gramsstr, case=False)
+        # ]
+        # print("***")
+        # print(matching_productgrams)
+
         try:
-            self.price2 = matching_productnames.iloc[0]["PRICE"]
-            print(self.price2)
+            i = 0
+            x = True
+            lendf = len(matching_productnames)
+            while x:
+                print(matching_productnames)
+                gram2 = matching_productnames.iloc[0]["GRAM"]
+                print(gramnumber)
+                print(gram2)
+                print(int(gramnumber) == int(gram2))
+                print(matching_productnames.iloc[i]["PRICE"])
+
+                if int(gramnumber) == int(gram2):
+                    self.price2 = matching_productnames.iloc[i]["PRICE"]
+                    x = False
+
+                i = i + 1
+                if i == lendf:
+                    x = False
+                    self.ava = "this item isnt available in quick"
+                print(self.price2)
         except:
             self.ava = "this item isnt available in quick"
+        print("**********")
+        print(self.name, self.gram)
+        if self.price2 > 0:
+            self.ava = ""
         # print("<><><><><><<")
         # print(matching_productnames)
         # g = str(gram)

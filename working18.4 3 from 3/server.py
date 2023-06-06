@@ -14,6 +14,10 @@ from flask import session, make_response
 from flask import Flask, render_template, request, redirect, url_for, flash
 import hashlib
 import pandas as pd
+import schedule
+import time
+import subprocess
+import threading
 
 
 app = Flask(__name__)
@@ -23,6 +27,32 @@ DATABASE = "database.db"
 app.secret_key = "123456"
 x1 = 0
 shopping_cart_names = set({})
+# subprocess.run(["python", "quickbout.py"])
+# subprocess.run(["python", "shupersalbot.py"])
+
+
+def run1():
+    while True:
+        try:
+            subprocess.run(["python", "quickbout.py"])
+            time.sleep(43200)  # 12 hours
+        except:
+            thread.exit()
+
+
+def run2():
+    while True:
+        try:
+            subprocess.run(["python", "shupersalbot.py"])
+            time.sleep(43200)  # 12 hours
+        except:
+            thread2.exit()
+
+
+thread = threading.Thread(target=run1)
+thread.start()
+thread2 = threading.Thread(target=run2)
+thread2.start()
 
 
 def name_to_cart():
