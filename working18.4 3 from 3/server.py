@@ -29,6 +29,7 @@ x1 = 0
 shopping_cart_names = set({})
 # subprocess.run(["python", "quickbout.py"])
 # subprocess.run(["python", "shupersalbot.py"])
+df["NAME"] = df["NAME"].fillna("")
 
 
 def run1():

@@ -11,13 +11,17 @@ url = "https://quik.co.il/search-result/%D7%91%D7%9E%D7%91%D7%94?q=%D7%91%D7%9E%
 url2 = "https://quik.co.il/products/%D7%A7%D7%A0%D7%99%D7%99%D7%94_%D7%9C%D7%A4%D7%99_%D7%94%D7%A1%D7%99%D7%93%D7%95%D7%A8_%D7%91%D7%91%D7%99%D7%AA/%D7%9E%D7%A9%D7%A7%D7%90%D7%95%D7%AA/%D7%9E%D7%A9%D7%A7%D7%90%D7%95%D7%AA_%D7%9E%D7%95%D7%92%D7%96%D7%99%D7%9D"
 url3 = "https://quik.co.il/products/%D7%A7%D7%A0%D7%99%D7%99%D7%94_%D7%9C%D7%A4%D7%99_%D7%94%D7%A1%D7%99%D7%93%D7%95%D7%A8_%D7%91%D7%91%D7%99%D7%AA/%D7%98%D7%A8%D7%99_%D7%95%D7%9E%D7%A7%D7%A8%D7%A8/%D7%A4%D7%99%D7%A8%D7%95%D7%AA_%D7%95%D7%99%D7%A8%D7%A7%D7%95%D7%AA"
 url5 = "https://quik.co.il/products/%D7%A7%D7%A0%D7%99%D7%99%D7%94_%D7%9C%D7%A4%D7%99_%D7%94%D7%A1%D7%99%D7%93%D7%95%D7%A8_%D7%91%D7%91%D7%99%D7%AA/%D7%90%D7%A8%D7%95%D7%A0%D7%95%D7%AA_%D7%9E%D7%96%D7%95%D7%9F/%D7%A9%D7%95%D7%A7%D7%95%D7%9C%D7%93_%D7%95%D7%9E%D7%9E%D7%AA%D7%A7%D7%99%D7%9D"
+url6 = "https://quik.co.il/products/%D7%A7%D7%A0%D7%99%D7%99%D7%94_%D7%9C%D7%A4%D7%99_%D7%94%D7%A1%D7%99%D7%93%D7%95%D7%A8_%D7%91%D7%91%D7%99%D7%AA/%D7%98%D7%A8%D7%99_%D7%95%D7%9E%D7%A7%D7%A8%D7%A8"
+url7 = "https://quik.co.il/products/%D7%A7%D7%A0%D7%99%D7%99%D7%94_%D7%9C%D7%A4%D7%99_%D7%94%D7%A1%D7%99%D7%93%D7%95%D7%A8_%D7%91%D7%91%D7%99%D7%AA/%D7%9E%D7%A7%D7%A4%D7%99%D7%90"
+url8 = "https://quik.co.il/products/%D7%A7%D7%A0%D7%99%D7%99%D7%94_%D7%9C%D7%A4%D7%99_%D7%94%D7%A1%D7%99%D7%93%D7%95%D7%A8_%D7%91%D7%91%D7%99%D7%AA/%D7%9C%D7%97%D7%9D_%D7%95%D7%9E%D7%90%D7%A4%D7%99%D7%9D"
 merged_df = pd.DataFrame(columns=["NAME", "PRICE", "GRAM"])
-urls = [url, url2, url3, url4, url5]
+urls = [url, url2, url3, url4, url5, url6, url7, url8]
 df2 = 0
 
 for url in urls:
     # Set up the webdriver
-    driver = webdriver.Chrome()
+    # driver = webdriver.Chrome()
+    driver = webdriver.Firefox()
     driver.get(url)
 
     driver.implicitly_wait(15)

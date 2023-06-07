@@ -30,6 +30,19 @@ class Item:
         df2 = df.copy()
         print(self.name, self.gram)
         matching_productnames = df[(df["NAME"]).str.contains(self.name, case=False)]
+        if matching_productnames.empty:
+            words = self.name.split()
+            first_two_words = " ".join(words[:2])
+            print(first_two_words)
+            matching_productnames = df[
+                (df["NAME"]).str.contains(first_two_words, case=False)
+            ]
+            if matching_productnames.empty:
+                last_two_words = " ".join(words[-2:])
+                matching_productnames = df[
+                    (df["NAME"]).str.contains(first_two_words, case=False)
+                ]
+
         print("***********")
         print(matching_productnames)
         gramsstr = str(self.gram + "")
@@ -37,7 +50,7 @@ class Item:
         print(self.gram)
         print("***")
         gramnumber = re.sub(r"\D", "", self.gram)
-        print(gramnumber)
+        print(gramnumber)  # המתוקן
         print("***??????????????")
         # matching_productgrams = matching_productnames[
         #     matching_productnames["GRAM"].astype(str).str.contains(gramsstr, case=False)
@@ -46,32 +59,43 @@ class Item:
         # print(matching_productgrams)
 
         try:
-            i = 0
+            i = -1
             x = True
-            lendf = len(matching_productnames)
+            # lendf = len(matching_productnames)
             while x:
+                i = i + 1
+                print(i)
                 print(matching_productnames)
-                gram2 = matching_productnames.iloc[0]["GRAM"]
+                gram2 = matching_productnames.iloc[i]["GRAM"]
                 print(gramnumber)
                 print(gram2)
-                print(int(gramnumber) == int(gram2))
+                print("hiiiiiiiiii")
+                try:
+                    gram2 = re.sub(r"\D", "", gram2)
+                except:
+                    print("hh")
+
                 print(matching_productnames.iloc[i]["PRICE"])
 
                 if int(gramnumber) == int(gram2):
                     self.price2 = matching_productnames.iloc[i]["PRICE"]
                     x = False
-
-                i = i + 1
-                if i == lendf:
+                if i > matching_productnames.shape[0]:
                     x = False
-                    self.ava = "this item isnt available in quick"
+                # if i == lendf:
+                #     x = False
+                #     self.ava = "this item isnt available in quick"
+
                 print(self.price2)
         except:
             self.ava = "this item isnt available in quick"
         print("**********")
+
         print(self.name, self.gram)
         if self.price2 > 0:
             self.ava = ""
+        self.price2 = round(self.price2, 1)
+
         # print("<><><><><><<")
         # print(matching_productnames)
         # g = str(gram)
